@@ -1,0 +1,10 @@
+[project]
+name = "myproject"
+dynamic = ["version"]
+
+[build-system]
+requires = ["setuptools >= 61.1.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "myproject.__version__"}
