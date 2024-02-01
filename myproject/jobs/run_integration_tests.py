@@ -9,18 +9,6 @@ import dagger
 async def main():
     config = dagger.Config(log_output=sys.stderr)
     async with dagger.Connection(config) as client:
-        server_root = client.host().directory("server")
-
-        http_server = (
-            client.container()
-            .from_("python:3.11-slim")
-            .with_directory("/server", server_root)
-            .with_workdir("/server")
-            .with_exec(["./run.sh"])
-            .with_exposed_port(8080)
-            .as_service()
-        )
-
         db_server = (
             client.container()
             .from_("postgres:16")
@@ -31,11 +19,21 @@ async def main():
             .as_service()
         )
 
+        http_server = (
+            client.container()
+            .from_("python:3.11-slim")
+            .with_directory("/server", client.host().directory("server"))
+            .with_workdir("/server")
+            .with_exec(["./run.sh"])
+            .with_exposed_port(8080)
+            .as_service()
+        )
+
         python = (
             client.container()
             .from_("python:3.11-slim")
-            .with_service_binding("server", http_server)
             .with_service_binding("db", db_server)
+            .with_service_binding("server", http_server)
             .with_directory("/src", client.host().directory("."))
             .with_workdir("/src")
             .with_mounted_cache(
