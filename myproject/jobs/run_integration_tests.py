@@ -6,7 +6,7 @@ import anyio
 import dagger
 
 
-async def test():
+async def main():
     config = dagger.Config(log_output=sys.stderr)
     async with dagger.Connection(config) as client:
         server_root = client.host().directory("server")
@@ -50,4 +50,4 @@ async def test():
         await python.sync()
 
 
-anyio.run(test)
+anyio.run(main)

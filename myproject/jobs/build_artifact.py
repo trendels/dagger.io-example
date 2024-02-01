@@ -5,7 +5,7 @@ import anyio
 import dagger
 
 
-async def test():
+async def main():
     config = dagger.Config(log_output=sys.stderr)
     async with dagger.Connection(config) as client:
         build = (
@@ -23,4 +23,4 @@ async def test():
         await build.directory("wheels").export("./wheels")
 
 
-anyio.run(test)
+anyio.run(main)

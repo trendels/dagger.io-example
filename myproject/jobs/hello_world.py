@@ -5,7 +5,7 @@ import anyio
 import dagger
 
 
-async def test():
+async def main():
     config = dagger.Config(log_output=sys.stderr)
     async with dagger.Connection(config) as client:
         python = (
@@ -19,4 +19,4 @@ async def test():
     print(f"Hello from Dagger and {version}")
 
 
-anyio.run(test)
+anyio.run(main)
