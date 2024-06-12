@@ -34,8 +34,8 @@ async def main():
             .from_("python:3.11-slim")
             .with_service_binding("db", db_server)
             .with_service_binding("server", http_server)
-            .with_directory("/src", client.host().directory("."))
-            .with_workdir("/src")
+            .with_directory("/project", client.host().directory("./project"))
+            .with_workdir("/project")
             .with_mounted_cache(
                 "/root/.cache/pip", client.cache_volume("pip-cache-python-3.11")
             )
